@@ -259,8 +259,8 @@ def eda():
                             return render_template('eda.html', columns=columns, df_html=df_html, analysis_result=analysis_result_html, image_path=image_rel_path)  
                         else:
                             print(f"Image file does not exist at {image_rel_path}")
-                    except:
-                        print("An exception occurred") 
+                    except Exception as e:  # Catch the exception and store it in variable 'e'
+                        print(f"An exception occurred: {e}")
                     finally:
                         if tmp_filename and os.path.exists(tmp_filename):
                             os.unlink(tmp_filename)
