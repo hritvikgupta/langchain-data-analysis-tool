@@ -58,6 +58,7 @@ def generate_image_path(image_file_name):
     return image_rel_path
 
 def generate_image(obj, prompt):
+    tmp_filename = None
     try:
         response = obj.generate_response(prompt)
         tmp_filename, image_file_name, _ = obj.extract_and_save(response, "new_header2")
@@ -72,7 +73,8 @@ def generate_image(obj, prompt):
     except:
         print("An exception occurred") 
     finally:
-        os.unlink(tmp_filename)
+        if tmp_filename and os.path.exists(tmp_filename):
+            os.unlink(tmp_filename)
 
 @app.route('/eda', methods=['GET', 'POST'])
 def eda():
@@ -108,7 +110,7 @@ def eda():
         df = pd.read_csv(filepath)
         columns = df.columns.tolist()
         df_html = df.head(5).to_html(classes='dataframe')
-
+        tmp_filename = None
         if custom_text and choose_option:
             prompt = custom_text
             custom_csv_path = False
@@ -138,7 +140,8 @@ def eda():
             except:
                     print("An exception occurred") 
             finally:
-                    os.unlink(tmp_filename)
+                   if tmp_filename and os.path.exists(tmp_filename):
+                         os.unlink(tmp_filename)
         else:
             option = None
             if action == 'handle_missing_values':
@@ -221,7 +224,8 @@ def eda():
                     except:
                         print("An exception occurred") 
                     finally:
-                        os.unlink(tmp_filename)
+                        if tmp_filename and os.path.exists(tmp_filename):
+                            os.unlink(tmp_filename)
 
                 case 4:
                     prompt = "Code perform univariate analysis on the"+column_name1+"column of the dataset using"+plot_type
@@ -239,7 +243,8 @@ def eda():
                     except:
                         print("An exception occurred") 
                     finally:
-                        os.unlink(tmp_filename)
+                        if tmp_filename and os.path.exists(tmp_filename):
+                            os.unlink(tmp_filename)
                 case 5:
                     # prompt = "Generate Python code to conduct multivariate analysis exploring the relationship between" + column_name1 + "and" + column_name2 + "using" + plot_type
                     prompt = "Generate Python code to conduct multivariate analysis exploring the relationship between " + column_name1 + " and " + column_name2 + " using " + plot_type
@@ -257,7 +262,8 @@ def eda():
                     except:
                         print("An exception occurred") 
                     finally:
-                        os.unlink(tmp_filename)
+                        if tmp_filename and os.path.exists(tmp_filename):
+                            os.unlink(tmp_filename)
 
                 case 6:
                     prompt = "Write a script to plot a" + plot_type + "for the" + column_name1 +"column in the dataset"
@@ -275,7 +281,8 @@ def eda():
                     except:
                         print("An exception occurred") 
                     finally:
-                        os.unlink(tmp_filename)
+                        if tmp_filename and os.path.exists(tmp_filename):
+                            os.unlink(tmp_filename)
 
                 case 7:
                     prompt = "Provide Python code for generating pair scatter plots to explore relationships between pairs of variables"
@@ -294,7 +301,8 @@ def eda():
                     except:
                         print("An exception occurred") 
                     finally:
-                        os.unlink(tmp_filename)
+                        if tmp_filename and os.path.exists(tmp_filename):
+                            os.unlink(tmp_filename)
                 case 8:
                     prompt = "Generate a script to display the correlation matrix between numerical features as a heatmap of the dataset"
                     try:
@@ -311,7 +319,8 @@ def eda():
                     except:
                         print("An exception occurred") 
                     finally:
-                        os.unlink(tmp_filename)
+                        if tmp_filename and os.path.exists(tmp_filename):
+                            os.unlink(tmp_filename)
 
                 case 9:
                     prompt = "Show the process of using EDA to find patterns and trends regarding"+column_name1+" with" + column_name2+" class."
@@ -335,7 +344,8 @@ def eda():
                     except:
                         print("An exception occurred") 
                     finally:
-                        os.unlink(tmp_filename)
+                        if tmp_filename and os.path.exists(tmp_filename):
+                            os.unlink(tmp_filename)
 
                 case _:
                     return "Option not recognized. Please provide a valid option for data analysis."
