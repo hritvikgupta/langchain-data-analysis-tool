@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDA Options and Results</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-RXf+QSDMh2xstFenRc+5lA7x3lvSWTx5V8DdOWBVJ3uYsv7F5VBEi2fHc4A6Rr5fVdTtzrD4zL8NtXqVp1/8g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f7f7f7;
+            color: #333;
+        }
+        .header {
+            background: #333;
+            color: #fff;
+            padding: 10px 20px;
+            padding: 10px 0; /* Adjust top and bottom padding */
+            text-align: center; /* Center align the text */
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .content {
+            display: flex;
+            margin: 20px;
+            justify-content: center; /* Center the children horizontally */
+            align-items: flex-start; /* Align the children to the top */
+            gap: 20px; /* This adds space between the form and results containers */
+            padding: 20px; /* Add padding around the content area */
+
+        }
+        .form-container {
+            flex-basis: 30%;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-right: 20px; /* Add space between the form and the results */
+
+        }
+        .results-container {
+            flex-basis: 65%;
+            display: flex;
+            margin-top: 20px;
+            flex-direction: row;
+            gap: 20px;
+            align-items: flex-start; /* Aligns items to the top */
+            overflow-x: hidden; /* Prevents horizontal scroll on the container itself */
+
+        }
+        .table-section, .image-section {
+            flex: 1;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 10px 5px;  /* Space between sections */
+
+        }
+        .table-section {
+            flex: 1;
+            margin-right: 10px;
+            max-width: 50%; /* Ensures that this section does not exceed half the width */
+            overflow-x: auto; /* Adds a scrollbar if the content is too wide */
+            min-width: 200px;
+
+        }
+        .image-section img {
+            min-width: 200px;
+            width: auto; /* This will make the image take up the full width of its container */
+            height: auto; /* This will maintain the image's aspect ratio */
+            max-width: 100%; /* Ensure the image is responsive and doesn't overflow */
+            max-height: 100%; /* Optionally restrict the height of the image */
+
+        }
+
+        .image-section {
+            flex: 1;
+            align-items: center;
+            align-content: center;
+            min-width: 200px;
+            max-width: 50%; /* Ensures that this section does not exceed half the width */
+            display: flex; /* Use flexbox to center the image */
+            flex-direction: column;
+            justify-content: center; /* Center the image horizontally */
+            align-items: center; /* Center the image vertically */
+            margin-left: 10px;
+
+        }
+        .table-scroll {
+            overflow-x: auto; /* Enables horizontal scrolling */
+            max-width: 100%; /* Ensures the div doesn't exceed its parent's width */
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        button {
+            cursor: pointer;
+            padding: 10px 15px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #5cb85c;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        .form-operations {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .form-row label {
+            margin-right: 5px;
+        }
+        .form-row select, .form-row input, .form-row button {
+            margin-right: 10px;
+            flex: 1;
+            min-width: 120px; /* Prevents elements from being too narrow */
+        }
+        .form-row .button-container {
+            display: flex;
+            justify-content: space-between;
+            flex-grow: 1;
+        }
+        .form-row button {
+            width: 150px; /* Adjust the width as needed */
+            height: 40px; /* Adjust the height as needed */
+            background-color: #28a745; /* Bootstrap's .btn-success color */
+            border: 1px solid #28a745; /* Same color for the border */
+            color: white; /* White text color */
+            font-size: 14px; /* Adjust font size as needed */
+            text-align: center;
+            line-height: 38px;/* Center the text vertically */
+            border-radius: 5px; /* Optional: rounded corners */
+            padding: 0 20px; /* Remove padding to maintain size */
+            margin: 0 3px; /* Add some space between buttons */
+            box-sizing: border-box; 
+        }
+        .form-row button:hover {
+            background-color: #4cae4c;
+            }
+        .form-row button:hover {
+            background-color: #4cae4c;
+        }
+        /* Ensure that the loader and image are centered */
+        .loader, #resultImage {
+            display: block;
+            margin: auto;
+        }
+            /* Adjusted input and select box styles with spacing */
+    .form-row > label,
+    .form-row > select,
+    .form-row > input {
+        margin-bottom: 10px; /* Space below each form element */
+    }
+    .form-row > label {
+    align-self: center; /* Aligns the label text vertically center */
+    margin-right: 10px; /* Space after the label */
+}
+    .form-row select,
+    .form-row input[type="text"] {
+        flex-grow: 1; /* Allows input and select to grow and take available space */
+        width: 100%; /* Full width to fill the container */
+        height: 50px; /* Larger height for a more prominent appearance */
+        border: 2px solid #ced4da; /* Slightly thicker border for definition */
+        border-radius: 8px; /* More pronounced rounded corners */
+        padding: 10px 15px; /* Ample padding for a spacious interior */
+        font-size: 18px; /* Larger font size for easy reading */
+        margin-right: 15px; /* Space to the right of inputs and selects */
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle inner shadow for depth */
+        background-color: #ffffff; /* White background */
+        box-sizing: border-box; /* Include padding and border in size */
+    }
+
+    .form-row select:focus,
+    .form-row input[type="text"]:focus {
+        border-color: #80bdff; /* Highlight color when focused */
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Glow effect when focused */
+        outline: none; /* Remove default outline to use custom styles */
+    }
+
+    .form-row > input[type="text"],
+.form-row > select,
+.form-row > button {
+    margin-bottom: 10px; /* Space below each form element */
+    height: 40px; /* Consistent height for input, select, and button */
+    padding: 0 10px; /* Padding for input and select; adjust button padding separately if needed */
+    font-size: 16px; /* Font size for readability */
+    border: 1px solid #ced4da; /* Border for input and select */
+    border-radius: 4px; /* Border radius for input and select */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+.form-row .button-container button {
+    width: auto; /* Allows the button to shrink/grow as needed */
+    flex: none; /* Do not allow the button to grow */
+    /* ... other button-container button styles ... */
+}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>EDA LLM</h1>
+    </div>
+    <div class="container">
+        <div class="form-container">
+            <form method="POST" class="form-operations">
+                <div class="form-row">
+                    <label for="input_text">Perform Custom Operation on Dataset</label>
+                    <input type="text" id="input_text" name="input_text" placeholder="Ask GPT About Dataset">
+            
+                    <label for="input_option">Choose Option:</label>
+                    <select id="input_option" name="input_option">
+                        <option value="">Select an option</option>
+                        <option value="dataframe">Dataframe</option>
+                        <option value="plot">Plot</option>
+                    </select>
+            
+                    <button type="submit" name="action" value="submit_text">Submit</button>
+
+                </div>
+                <div class="form-row">
+                    <label for="column_name1">Column 1:</label>
+                    <select name="column_name1">
+                        {% for column in columns %}
+                        <option value="{{ column }}">{{ column }}</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <label for="column_name2">Column 2 (Optional):</label>
+                    <select name="column_name2">
+                        <option value="">None</option>
+                        {% for column in columns %}
+                        <option value="{{ column }}">{{ column }}</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <label for="plot_type">Plot Type (Optional):</label>
+                    <input type="text" name="plot_type" list="plot_types" placeholder="Enter plot type">
+                    <datalist id="plot_types">
+                        <option value="scatter plot">Scatter Plot</option>
+                        <option value="line plot">Line Plot</option>
+                        <option value="histogram">Histogram</option>
+                        <option value="box plot">Box Plot</option>
+                        <!-- Add more plot types as needed -->
+                    </datalist>
+                </div>
+                <div class="form-row button-container">
+                    <button type="submit" name="action" value="handle_missing_values">Handle Missing Values</button>
+                    <button type="submit" name="action" value="missing_stat">Missing Statistics</button>
+                    <button type="submit" name="action" value="multivariate_analysis">Multivariate Analysis</button>
+                    <button type="submit" name="action" value="statistical_summary">Statistical Summary</button>
+                    <button type="submit" name="action" value="univariate_analysis">Univariate Analysis</button>
+                    <!-- <button type="submit" name="action" value="multivariate_analysis_custom">Custom Multivariate Analysis</button> -->
+                    <button type="submit" name="action" value="plot_column">Plot Single Column</button>
+                    <button type="submit" name="action" value="pair_scatter_plots">Pair Scatter Plots</button>
+                    <button type="submit" name="action" value="correlation_heatmap">Correlation Heatmap</button>
+                    <!-- <button type="submit" name="action" value="pattern_trends">Patterns and Trends</button> -->
+                    <!-- <button type="submit" name="action" value="invalid_option">Invalid Option</button> -->
+                </div>
+            </form>
+        </div>
+        <div class="results-container">
+            <div class="image-section">
+                <!-- Loader will be shown until the image loads -->
+                    <h2>Analysis Result Image</h2>
+                    <div class="loader" id="loader"></div>
+                    {% if image_path %}
+                    <div>
+                        <img src={{image_path}} alt="Generated Image">
+                    </div>
+                    {% else %}
+                        <!-- Make sure to use the correct path to your demo image -->
+                        <img src="{{ url_for('static', filename='demoimage.png') }}" alt="Demo Image">
+                    {% endif %}
+         
+                <div class="loader" id="loader" style="display: none;"></div>
+                <img id="resultImage" src="" alt="Generated Image" style="display: none;">
+            </div>
+            <div class="table-section">
+                <h2>Analysis Result Table</h2>
+                <!-- Conditionally render the analysis result or the original DataFrame -->
+                <div class="table-scroll">
+                    {% if analysis_result %}
+                        {{ analysis_result|safe }}
+                    {% else %}
+                        {{ df_html|safe }}  <!-- Render the pre-converted HTML content directly -->
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <script>
+        function validateAndSubmit(action) {
+            console.log('validateAndSubmit function called'); // Debugging
+    
+            // Validate input fields only when the "Submit" button is clicked
+            if (action === 'submit_text') {
+                var inputText = document.getElementById('input_text');
+                var inputOption = document.getElementById('input_option');
+    
+                if (!inputText.value.trim()) {
+                    alert('Please enter text');
+                    return false; // Prevent form submission
+                }
+    
+                if (!inputOption.value.trim()) {
+                    alert('Please select an option');
+                    return false; // Prevent form submission
+                }
+            }
+    
+            // If validation passes or action is not 'submit_text', submit the form
+            document.getElementById('mainForm').submit();
+        }
+    </script>
+    
+    
+    
+</body>
+</html>
+
