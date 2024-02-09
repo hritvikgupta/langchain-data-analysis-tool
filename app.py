@@ -252,7 +252,7 @@ def eda():
                         response = obj.generate_response(prompt)
                         tmp_filename, image_file_name, _ = obj.extract_and_save(response, "new_header2")
                                     
-                        result = subprocess.run(["python3", tmp_filename], capture_output=True, text=True, timeout=30)
+                        result = subprocess.run(["python3", tmp_filename], capture_output=True, text=True)
                         image_rel_path = generate_image_path(image_file_name)   
 
                         if os.path.exists(os.path.join(app.root_path, image_rel_path)) and result.returncode == 0:
