@@ -256,6 +256,7 @@ def eda():
                         image_rel_path = generate_image_path(image_file_name)   
 
                         if os.path.exists(os.path.join(app.root_path, image_rel_path)) and result.returncode == 0:
+                            print(result.returncode, image_rel_path)
                             return render_template('eda.html', columns=columns, df_html=df_html, analysis_result=analysis_result_html, image_path=image_rel_path)  
                         else:
                             print(f"Image file does not exist at {image_rel_path}")
