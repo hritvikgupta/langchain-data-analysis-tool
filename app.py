@@ -246,25 +246,29 @@ def eda():
                         if tmp_filename and os.path.exists(tmp_filename):
                             os.unlink(tmp_filename)
                 case 5:
-                    # prompt = "Generate Python code to conduct multivariate analysis exploring the relationship between" + column_name1 + "and" + column_name2 + "using" + plot_type
                     prompt = "Generate Python code to conduct multivariate analysis exploring the relationship between " + column_name1 + " and " + column_name2 + " using " + plot_type
                     try:
+                        print("Generating response for prompt:", prompt)  # Debugging
                         response = obj.generate_response(prompt)
                         tmp_filename, image_file_name, _ = obj.extract_and_save(response, "new_header2")
-                                    
+                        
+                        print("Executing subprocess:", tmp_filename)  # Debugging
                         result = subprocess.run(["python3", tmp_filename], capture_output=True, text=True, timeout=400)
-                        image_rel_path = generate_image_path(image_file_name)   
-
+                        
+                        print("Subprocess result:", result.returncode, result.stdout, result.stderr)  # Debugging
+                        image_rel_path = generate_image_path(image_file_name)
+                        
                         if os.path.exists(os.path.join(app.root_path, image_rel_path)) and result.returncode == 0:
-                            print(result.returncode, image_rel_path)
-                            return render_template('eda.html', columns=columns, df_html=df_html, analysis_result=analysis_result_html, image_path=image_rel_path)  
+                            print("Result returncode:", result.returncode, "Image path:", image_rel_path)  # Debugging
+                            return render_template('eda.html', columns=columns, df_html=df_html, analysis_result=analysis_result_html, image_path=image_rel_path)
                         else:
-                            print(f"Image file does not exist at {image_rel_path}")
-                    except Exception as e:  # Catch the exception and store it in variable 'e'
+                            print(f"Image file does not exist at {image_rel_path} or subprocess failed")
+                    except Exception as e:
                         print(f"An exception occurred: {e}")
                     finally:
                         if tmp_filename and os.path.exists(tmp_filename):
                             os.unlink(tmp_filename)
+
 
                 case 6:
                     prompt = "Write a script to plot a" + plot_type + "for the" + column_name1 +"column in the dataset"
