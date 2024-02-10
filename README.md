@@ -48,20 +48,7 @@ To set up the project locally, follow these steps:
     ```bash
     flask run
     ```
-
-## Usage
-
-After starting the application, navigate to `http://localhost:5000/` in your web browser to access the tool. Upload a CSV file and use the web interface to perform data analysis operations.
-
-## Contributing
-
-Contributions are welcome! If you have suggestions or want to contribute to the project, feel free to create issues or pull requests on the GitHub repository.
-
-## License
-
-[MIT License](LICENSE) - see the `LICENSE` file for details.
-
-
+    
 ## Run this using Docker and Docker Command to use when you have to pull the image and edit it
 1. First pull the image
     ```bash
@@ -92,6 +79,21 @@ Contributions are welcome! If you have suggestions or want to contribute to the 
     Request access on hritvik7654@gmail.com
     
 9. If image is running successful then push the image
-```bash
+   ```bash
    docker push hritvik7654/edaimage:02
-    ```
+     ```
+   
+## Usage
+
+After starting the application, navigate to `http://localhost:5000/` in your web browser to access the tool. Upload a CSV file and use the web interface to perform data analysis operations.
+
+## Contributing
+
+Contributions are welcome! If you have suggestions or want to contribute to the project, feel free to create issues or pull requests on the GitHub repository.
+
+## License
+
+[MIT License](LICENSE) - see the `LICENSE` file for details.
+
+
+
